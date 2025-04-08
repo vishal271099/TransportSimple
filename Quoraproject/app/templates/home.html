@@ -1,0 +1,482 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Quora Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'admin/css/styles.css' %}">
+
+  <style>
+     #title{
+      width: 100%;
+      border-color: grey;
+      padding-bottom: 10px;
+     }
+     #description{
+      width: 100%;
+      border-color: grey;
+      padding-bottom: 10px;
+     }
+    #answer-content{
+      width: 100%;
+      border-color: grey;
+      padding-bottom: 10px;
+    }
+    /* General body styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Fixed heading at the top */
+    h2 {
+      font-size: 28px;
+      color: red;
+      margin: 0;
+      padding: 20px;
+      background-color: #fff;
+      width: 100%;
+      text-align: center;
+      border-bottom: 2px solid #ddd;
+    }
+
+    /* Header container for Quora title and logout button */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background-color: #fff;
+      border-bottom: 2px solid #ddd;
+    }
+
+    /* Style for the logout button */
+    #logout-btn {
+      padding: 10px 20px;
+      background-color: #ff4c4c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #logout-btn:hover {
+      background-color: #e04a4a;
+    }
+
+    /* Fixed Add Question Button */
+    #add-question-btn {
+      position: fixed;
+      top: 125px; /* Place the button below the heading */
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      z-index: 5; /* Ensure button is on top */
+    }
+
+    #add-question-btn:hover {
+      background-color: #45a049;
+    }
+
+    /* Content wrapper that will be scrollable */
+    .content-wrapper {
+      margin-top: 120px; /* Space for the fixed heading and button */
+      padding: 20px;
+      overflow-y: auto; /* Enable vertical scrolling */
+      height: calc(100vh - 120px); /* Ensure content fills the remaining space */
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999; /* Make sure modal is above all other content */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7); /* Darkened background */
+      overflow: auto; /* Allow the modal to scroll if needed */
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 50%;
+      border-radius: 8px;
+      position: relative; /* Positioning for close button */
+    }
+
+    .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Question Container */
+    .question-container {
+      width: 80%;
+      margin: 30px auto;
+      position: relative; /* To keep everything positioned correctly */
+      overflow: auto;
+    }
+
+    .question-item {
+      padding: 20px;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      position: relative;
+    }
+
+    .question-item a {
+      font-size: 20px;
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .question-container p {
+      font-size: 16px;
+      color: #666;
+    }
+
+    .user-name {
+      font-size: 14px;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    .answer-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .answer-container {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    /* Modal (Popup) Styles */
+  #question-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position to cover the whole screen */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Darkened background */
+    overflow: auto; /* Allow modal content to scroll if necessary */
+    z-index: 1000; /* Ensure modal stays on top */
+  }
+
+  /* Modal Content Styling */
+  .modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 50%; /* Width of the modal */
+    position: relative; /* Position for the close button */
+  }
+
+  /* Close Button Styling */
+  .close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Button to Add Answer */
+  .answer-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+
+  .answer-btn:hover {
+    background-color: #0056b3;
+  }
+
+  /* Question Item Styling */
+  .question-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+
+  .question-item a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 18px;
+  }
+
+  .question-item .user-name {
+    font-size: 14px;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+
+  .question-item p {
+    font-size: 16px;
+    color: #666;
+  }
+
+  /* Answer Container Styling */
+  .answer-container {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .answer-container p {
+    font-size: 14px;
+    color: #333;
+  }
+  /* Like Button Styles */
+.like-btn {
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.like-btn i {
+  margin-right: 5px;
+}
+
+.like-btn:hover {
+  color: #0056b3;
+}
+
+.like-count {
+  font-size: 14px;
+  color: #555;
+}
+
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header with Quora title and Logout button -->
+    <div class="header-container">
+      <h2>Quora Clone</h2>
+      <form action="{% url 'user_logout' %}" method="POST">
+        {% csrf_token %}
+        <button id="logout-btn" type="submit">Logout</button>
+      </form>
+   </div>
+
+    <!-- Fixed Add Question button -->
+    <button id="add-question-btn" onclick="showquestionpopupftn()">Add Question</button>
+
+    <!-- Modal for Adding a Question -->
+    <div id="question-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Ask a Question</h3>
+        <form id="question-form" method="POST">
+          {% csrf_token %}
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" required>
+          <br>
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" required></textarea>
+          <br>
+          <button type="submit" name="submitquestion">Submit Question</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Content Wrapper for Scrollable Questions -->
+    <div class="content-wrapper">
+      <!-- Displaying All Questions -->
+      <div class="question-container">
+        {% for question in questions %}
+          <div class="question-item">
+            <div class="user-name">{{ question.created_by }}</div>
+            <a href="{% url 'question_detail' question.pk %}">{{ question.title }}</a>
+            <p>{{ question.description }}</p>
+            
+            <!-- Add Answer Button -->
+            
+
+            <!-- Displaying Answers Below the Question -->
+            {% for answer in question.answers.all %}
+              <div class="answer-container">
+                <p><strong>Answer:</strong> {{ answer.answer_text }}</p>
+                
+                <!-- Like Button (Thumbs Up Icon) -->
+                <button class="like-btn" data-answer-id="{{ answer.pk }}" onclick="likeAnswer({{ answer.pk }})">
+                  <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                  <span class="like-count">{{ answer.likes.count }}</span>
+                </button>
+              </div>
+            {% endfor %}
+            <br><br>
+            <button class="answer-btn" onclick="openAnswerModal({{ question.pk }})">Add Answer</button>
+          </div>
+        {% endfor %}
+      </div>
+
+    </div>
+    
+  </div>
+
+  <!-- Modal for Adding an Answer -->
+  <div id="answer-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Write an Answer</h3>
+      <form id="answer-form" method="POST">
+        {% csrf_token %}
+        <input type="hidden" id="question-id" name="question_id">
+        <label for="answer-content">Answer:</label>
+        <textarea id="answer-content" name="content" required></textarea>
+        <br>
+        <button type="submit" name="submitanswer">Submit Answer</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Function to handle the like button click
+    function likeAnswer(answerId) {
+      fetch(`/like-answer/${answerId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          'answer_id': answerId,
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Update the like count displayed on the button
+          const likeCount = document.querySelector(`[data-answer-id="${answerId}"] .like-count`);
+          likeCount.textContent = data.new_like_count;
+        } else {
+          alert("You have already liked this answer.");
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  </script>
+  <script>
+    function showquestionpopupftn(){
+      // Get the modal and close button elements
+    var questionModal = document.getElementById("question-modal");
+    var closeModal = document.getElementsByClassName("close")[0];  // Close button in the question modal
+  
+    // When the user clicks the close button (×), close the modal
+    closeModal.onclick = function() {
+      questionModal.style.display = "none";  // Hide the modal
+      document.body.style.overflow = 'auto'; // Enable page scrolling again
+    }
+    // When the user clicks anywhere outside the modal, close it
+        questionModal.style.display = "block";  // Hide the modal if clicked outside // Enable page scrolling again
+        document.body.style.overflow = 'hidden'
+      }
+  </script>
+  <script>
+    // Get modal and the close button elements
+    var answerModal = document.getElementById("answer-modal");
+    var closeModal = document.getElementsByClassName("close")[0];
+  
+    // Function to open the answer modal and set the question ID
+    function openAnswerModal(questionId) {
+      // Set the question ID in the hidden input field
+      document.getElementById("question-id").value = questionId;
+  
+      // Display the modal
+      answerModal.style.display = "block";
+  
+      // Disable body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    }
+  
+    // When the user clicks on the close button, close the modal
+    closeModal.onclick = function() {
+      answerModal.style.display = "none";
+      // Enable body scroll again
+      document.body.style.overflow = 'auto';
+    }
+  
+    // When the user clicks anywhere outside the modal, close the modal
+    window.onclick = function(event) {
+      if (event.target == answerModal) {
+        answerModal.style.display = "none";
+        document.body.style.overflow = 'auto'; // Enable body scroll again
+      }
+    }
+  </script>
+  
+  

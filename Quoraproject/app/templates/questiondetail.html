@@ -1,0 +1,17 @@
+<h2>{{ question.title }}</h2>
+<p>{{ question.description }}</p>
+
+<h3>Answers</h3>
+{% for answer in answers %}
+  <div>
+    <p>{{ answer.answer_text }}</p>
+    <p>By {{ answer.created_by.username }}</p>
+  </div>
+{% endfor %}
+
+<h3>Post an Answer</h3>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Post Answer</button>
+</form>

@@ -1,0 +1,307 @@
+
+     #title{
+      width: 100%;
+      border-color: grey;
+      padding-bottom: 10px;
+     }
+     #description{
+      width: 100%;
+      border-color: grey;
+      padding-bottom: 10px;
+     }
+    #answer-content{
+      width: 100%;
+      border-color: grey;
+      padding-bottom: 10px;
+    }
+    /* General body styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Fixed heading at the top */
+    h2 {
+      font-size: 28px;
+      color: red;
+      margin: 0;
+      padding: 20px;
+      background-color: #fff;
+      width: 100%;
+      text-align: center;
+      border-bottom: 2px solid #ddd;
+    }
+
+    /* Header container for Quora title and logout button */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background-color: #fff;
+      border-bottom: 2px solid #ddd;
+    }
+
+    /* Style for the logout button */
+    #logout-btn {
+      padding: 10px 20px;
+      background-color: #ff4c4c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #logout-btn:hover {
+      background-color: #e04a4a;
+    }
+
+    /* Fixed Add Question Button */
+    #add-question-btn {
+      position: fixed;
+      top: 125px; /* Place the button below the heading */
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      z-index: 5; /* Ensure button is on top */
+    }
+
+    #add-question-btn:hover {
+      background-color: #45a049;
+    }
+
+    /* Content wrapper that will be scrollable */
+    .content-wrapper {
+      margin-top: 120px; /* Space for the fixed heading and button */
+      padding: 20px;
+      overflow-y: auto; /* Enable vertical scrolling */
+      height: calc(100vh - 120px); /* Ensure content fills the remaining space */
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999; /* Make sure modal is above all other content */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7); /* Darkened background */
+      overflow: auto; /* Allow the modal to scroll if needed */
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 50%;
+      border-radius: 8px;
+      position: relative; /* Positioning for close button */
+    }
+
+    .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Question Container */
+    .question-container {
+      width: 80%;
+      margin: 30px auto;
+      position: relative; /* To keep everything positioned correctly */
+      overflow: auto;
+    }
+
+    .question-item {
+      padding: 20px;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      position: relative;
+    }
+
+    .question-item a {
+      font-size: 20px;
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .question-container p {
+      font-size: 16px;
+      color: #666;
+    }
+
+    .user-name {
+      font-size: 14px;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    .answer-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .answer-container {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    /* Modal (Popup) Styles */
+  #question-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position to cover the whole screen */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Darkened background */
+    overflow: auto; /* Allow modal content to scroll if necessary */
+    z-index: 1000; /* Ensure modal stays on top */
+  }
+
+  /* Modal Content Styling */
+  .modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 50%; /* Width of the modal */
+    position: relative; /* Position for the close button */
+  }
+
+  /* Close Button Styling */
+  .close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Button to Add Answer */
+  .answer-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+
+  .answer-btn:hover {
+    background-color: #0056b3;
+  }
+
+  /* Question Item Styling */
+  .question-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+
+  .question-item a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 18px;
+  }
+
+  .question-item .user-name {
+    font-size: 14px;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+
+  .question-item p {
+    font-size: 16px;
+    color: #666;
+  }
+
+  /* Answer Container Styling */
+  .answer-container {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .answer-container p {
+    font-size: 14px;
+    color: #333;
+  }
+  /* Like Button Styles */
+.like-btn {
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.like-btn i {
+  margin-right: 5px;
+}
+
+.like-btn:hover {
+  color: #0056b3;
+}
+
+.like-count {
+  font-size: 14px;
+  color: #555;
+}
